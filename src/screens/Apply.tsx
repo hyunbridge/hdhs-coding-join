@@ -41,7 +41,7 @@ class ApplyPageState extends React.Component<IApplyPageProps, IApplyPageState> {
 
   handleInput = (event: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>) => {
     const input = event.target as HTMLTextAreaElement;
-    var invalid: boolean = false;
+    let invalid: boolean = false;
     switch (input.id) {
       case 'studentNumber':
         if (input.value.length <= 5) {
@@ -97,9 +97,9 @@ class ApplyPageState extends React.Component<IApplyPageProps, IApplyPageState> {
       this.setState({ phoneNumber: `010-${E164PhoneNumber.slice(5, 9)}-${E164PhoneNumber.slice(9, 13)}`, });
 
       try {
-        var doc = await form.get();
+        const doc = await form.get();
         if (doc.exists) {
-          var docData = doc.data();
+          const docData = doc.data();
           if (docData !== undefined) {
             this.setState({
               studentNumber: docData['학번'],

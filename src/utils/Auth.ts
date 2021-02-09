@@ -1,6 +1,6 @@
 import { SwalDefault, Firebase } from '../utils';
 
-var recaptchaVerifier = (window as any)['recaptchaVerifier']
+let recaptchaVerifier = (window as any)['recaptchaVerifier']
 
 class Auth {
     firebaseAuth: Firebase.auth.Auth;
@@ -21,8 +21,8 @@ class Auth {
     }
 
     async auth(phoneNumber: string) {
-        var result: Firebase.auth.UserCredential;
-        var user: Firebase.User | null = null;
+        let result: Firebase.auth.UserCredential;
+        let user: Firebase.User | null = null;
         try {
             const confirmationResult = await this.firebaseAuth.signInWithPhoneNumber(phoneNumber, recaptchaVerifier);
             recaptchaVerifier.reset();
@@ -73,7 +73,7 @@ class Auth {
     async checkPermission() {
         const form = Firebase.firestore().collection("permissions").doc('form');
         try {
-            var doc = await form.get();
+            const doc = await form.get();
             if (doc.exists && doc.data()?.access === true) {
                 return true;
             }

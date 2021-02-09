@@ -24,9 +24,9 @@ class SignInPageState extends React.Component<ISignInPageProps, ISignInPageState
   }
 
   handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    var phoneNumberWithoutHyphen: string;
-    var phoneNumber: string;
-    var signInButtonEnabled: boolean;
+    let phoneNumberWithoutHyphen: string;
+    let phoneNumber: string;
+    let signInButtonEnabled: boolean;
 
     phoneNumberWithoutHyphen = e.target.value.replace(/[^0-9]/g, '');
 

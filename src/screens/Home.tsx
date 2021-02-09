@@ -35,8 +35,7 @@ class HomePage extends React.Component<RouteComponentProps, IHomePageState> {
   }
 
   handleClick = async () => {
-    var result: SweetAlertResult<any>;
-    result = await SwalDefault.fire({
+    const result: SweetAlertResult<any> = await SwalDefault.fire({
       html: '<h3><a href="https://www.notion.so/c23f95d4dc6b49b1a4e0e64a496a3e36" target="_blank">개인정보처리방침</a>에 동의하시나요?</h3>',
       showCancelButton: true,
       confirmButtonText: '네',

@@ -4,33 +4,41 @@ import { SweetAlertResult } from 'sweetalert2';
 import { SwalDefault, CheckPermission } from '../utils';
 import './App.css';
 
+interface IHomePageProps extends RouteComponentProps {
+}
+
 interface IHomePageState {
   buttonContent: JSX.Element;
   buttonEnabled: boolean;
 }
 
-class HomePage extends React.Component<RouteComponentProps, IHomePageState> {
-  constructor(props: RouteComponentProps) {
+class HomePage extends React.Component<IHomePageProps, IHomePageState> {
+  constructor(props: IHomePageProps) {
     super(props);
     this.state = {
       buttonContent: <span className="spinner-border" role="status" aria-hidden="true" style={{ width: '1.5rem', height: '1.5rem' }}></span>,
       buttonEnabled: false
     };
+  }
+
+  componentDidMount() {
     this.checkAvaility();
   }
 
   checkAvaility = async () => {
-    const available: boolean = await CheckPermission();
-    if (available) {
-      this.setState({
-        buttonContent: <span>지금 지원하기</span>,
-        buttonEnabled: true
-      });
-    } else {
-      this.setState({
-        buttonContent: <span>지금은 지원 가능 기간이 아닙니다.</span>,
-        buttonEnabled: false
-      });
+    if ((window as any)['isAvailable'] !== true) {
+      (window as any)['isAvailable'] = await CheckPermission();
+      if ((window as any)['isAvailable']) {
+        this.setState({
+          buttonContent: <span>지금 지원하기</span>,
+          buttonEnabled: true
+        });
+      } else {
+        this.setState({
+          buttonContent: <span>지금은 지원 가능 기간이 아닙니다.</span>,
+          buttonEnabled: false
+        });
+      }
     }
   }
 
@@ -43,7 +51,6 @@ class HomePage extends React.Component<RouteComponentProps, IHomePageState> {
       focusCancel: true,
     });
     if (result.isConfirmed) {
-      (window as any)['privacyPolicyConfirmed'] = true;
       this.props.history.push('/signIn');
     }
   }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Auth, Firebase, SwalDefault } from '../utils';
+import { RouteComponentProps } from 'react-router-dom';
+import { Auth, CheckPermission, Firebase, SwalDefault } from '../utils';
 import './App.css';
 
-interface IApplyPageProps {
+interface IApplyPageProps extends RouteComponentProps {
 }
 
 interface IApplyPageState {
@@ -17,7 +17,7 @@ interface IApplyPageState {
   deleteButtonEnabled: boolean;
 }
 
-class ApplyPageState extends React.Component<IApplyPageProps, IApplyPageState> {
+class ApplyPage extends React.Component<IApplyPageProps, IApplyPageState> {
   auth: Auth;
   uid: string;
 
@@ -35,8 +35,34 @@ class ApplyPageState extends React.Component<IApplyPageProps, IApplyPageState> {
       submitButtonEnabled: false,
       deleteButtonEnabled: true
     };
+  }
 
-    Firebase.auth().onAuthStateChanged(this.getForm)
+  componentDidMount = async () => {
+    await this.checkAvaility();
+    this.registerAuthStateChangeListener();
+  }
+
+  checkAvaility = async () => {
+    if ((window as any)['isAvailable'] === undefined) {
+      (window as any)['isAvailable'] = await CheckPermission();
+    }
+    if ((window as any)['isAvailable'] !== true) {
+      this.props.history.push('/');
+    }
+  }
+
+  registerAuthStateChangeListener = () => {
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if ((window as any)['isAvailable'] === true) {
+          this.getForm(user);
+        } else {
+          this.signOut();
+        }
+      } else {
+        this.props.history.push('/signIn');
+      }
+    });
   }
 
   handleInput = (event: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>) => {
@@ -225,24 +251,6 @@ class ApplyPageState extends React.Component<IApplyPageProps, IApplyPageState> {
       </div>
     );
   }
-}
-
-const ApplyPage = () => {
-  const history = useHistory();
-
-  if ((window as any)['privacyPolicyConfirmed'] !== true) {
-    history.push('/');
-  }
-
-  Firebase.auth().onAuthStateChanged((user: Firebase.User | null) => {
-    if (!user) {
-      history.push('/signIn');
-    }
-  })
-
-  return (
-    <ApplyPageState />
-  );
 }
 
 export default ApplyPage;

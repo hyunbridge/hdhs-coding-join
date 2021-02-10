@@ -1,9 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Auth, Firebase } from '../utils';
+import { RouteComponentProps } from 'react-router-dom';
+import { Auth, CheckPermission, Firebase } from '../utils';
 import './App.css';
 
-interface ISignInPageProps {
+interface ISignInPageProps extends RouteComponentProps {
 }
 
 interface ISignInPageState {
@@ -11,7 +11,7 @@ interface ISignInPageState {
   signInButtonEnabled: boolean;
 }
 
-class SignInPageState extends React.Component<ISignInPageProps, ISignInPageState> {
+class SignInPage extends React.Component<ISignInPageProps, ISignInPageState> {
   auth: Auth;
 
   constructor(props: ISignInPageProps) {
@@ -21,6 +21,28 @@ class SignInPageState extends React.Component<ISignInPageProps, ISignInPageState
       phoneNumber: '010-',
       signInButtonEnabled: false
     };
+  }
+
+  componentDidMount = () => {
+    this.checkAvaility();
+    this.registerAuthStateChangeListener();
+  }
+
+  checkAvaility = async () => {
+    if ((window as any)['isAvailable'] === undefined) {
+      (window as any)['isAvailable'] = await CheckPermission();
+    }
+    if ((window as any)['isAvailable'] !== true) {
+      this.props.history.push('/');
+    }
+  }
+
+  registerAuthStateChangeListener = () => {
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.props.history.push('/apply');
+      }
+    });
   }
 
   handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,24 +104,6 @@ class SignInPageState extends React.Component<ISignInPageProps, ISignInPageState
       </div>
     );
   }
-}
-
-const SignInPage = () => {
-  const history = useHistory();
-
-  if ((window as any)['privacyPolicyConfirmed'] !== true) {
-    history.push('/');
-  }
-
-  Firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      history.push('/apply');
-    }
-  })
-
-  return (
-    <SignInPageState />
-  );
 }
 
 export default SignInPage;

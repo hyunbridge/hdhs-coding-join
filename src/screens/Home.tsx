@@ -26,19 +26,19 @@ class HomePage extends React.Component<IHomePageProps, IHomePageState> {
   }
 
   checkAvaility = async () => {
-    if ((window as any)['isAvailable'] !== true) {
+    if ((window as any)['isAvailable'] === undefined) {
       (window as any)['isAvailable'] = await CheckPermission();
-      if ((window as any)['isAvailable']) {
-        this.setState({
-          buttonContent: <span>지금 지원하기</span>,
-          buttonEnabled: true
-        });
-      } else {
-        this.setState({
-          buttonContent: <span>지금은 지원 가능 기간이 아닙니다.</span>,
-          buttonEnabled: false
-        });
-      }
+    }
+    if ((window as any)['isAvailable'] === true) {
+      this.setState({
+        buttonContent: <span>지금 지원하기</span>,
+        buttonEnabled: true
+      });
+    } else {
+      this.setState({
+        buttonContent: <span>지금은 지원 가능 기간이 아닙니다.</span>,
+        buttonEnabled: false
+      });
     }
   }
 

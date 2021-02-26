@@ -369,16 +369,14 @@ class ApplyPage extends React.Component<IApplyPageProps, IApplyPageState> {
         >
           지원서 삭제
         </button>
-        <div className="text-muted text-right fixed-top m-2">
-          <button
-            className="btn"
-            type="button"
-            id="signOutButton"
-            onClick={this.signOut}
-          >
-            로그아웃
-          </button>
-        </div>
+        <button
+          className="btn btn-block mt-3"
+          type="button"
+          id="signOutButton"
+          onClick={this.signOut}
+        >
+          로그아웃
+        </button>
       </div>
     );
   }

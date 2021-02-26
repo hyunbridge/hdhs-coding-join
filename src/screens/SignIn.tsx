@@ -102,6 +102,7 @@ class SignInPage extends React.Component<ISignInPageProps, ISignInPageState> {
         <h1 className="title fw-bold">안녕하세요!👋</h1>
         <p className="desp">전화번호를 입력하여 로그인하세요.</p>
         <input
+          autoFocus={true}
           type="text"
           inputMode="numeric"
           id="phoneNumber"

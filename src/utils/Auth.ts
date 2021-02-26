@@ -37,7 +37,7 @@ class Auth {
       await SwalDefault.fire({
         title: "인증번호 입력",
         html: `<label for="authCode" class="m-2">인증문자가 발송되었습니다. 발송된 6자리 인증번호를 입력해 주세요.</label>
-                       <input inputmode="numeric" id="authCode" class="text-center text-lg text-monospace form-control my-3 p-0" maxlength="6" />`,
+                       <input autofocus="autofocus" inputmode="numeric" id="authCode" class="text-center text-lg text-monospace form-control my-3 p-0" maxlength="6" />`,
         showCancelButton: true,
         willOpen: () => {
           const input = document.querySelector("#authCode") as HTMLInputElement;

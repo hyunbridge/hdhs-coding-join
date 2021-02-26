@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Apply, Home, NotFound, SignIn } from './screens';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Apply, Home, NotFound, SignIn } from "./screens";
 
 const Router = () => {
   return (
@@ -12,6 +12,6 @@ const Router = () => {
       </Switch>
     </BrowserRouter>
   );
-}
+};
 
 export default Router;
